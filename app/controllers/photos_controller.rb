@@ -24,6 +24,9 @@ class PhotosController < ApplicationController
 
   def edit
     @photo = Photo.find(params[:id])
+    @new_grad = Graduate.new
+    @grad_year_id = @photo.grad_year_id
+    @graduates = Graduate.where(grad_year_id: @grad_year_id)
   end
 
   private

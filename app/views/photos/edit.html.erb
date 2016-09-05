@@ -8,16 +8,46 @@
 <script>
 	$(function($) {
 		$('#photoTag').Jcrop({ onSelect: noteCoords });
+		<%- @graduates.each do |g| -%>
+			var overlay = $('<div>');
+			var x = <%= g.x %>;
+			var y = <%= g.y %>;
+			var width = <%= g.x2 %> - x;
+			var height = <%= g.y2 %> - y;
+			overlay.attr('style', `position: absolute; left: ${x}px; top: ${y}px; z-index: 500; background-color: black; width: ${width}px; height: ${height}px`);
+			$('.jcrop-holder').append(overlay);
+		<%- end -%>
 		var bubble = $('<div>');
 		bubble.attr('id', 'bubble');
-		bubble.html('<h2>Add Grad</h2>');
-		bubble.attr('style', 'position: absolute; left: 0px; top: 0px');
+		bubble.html('<%= j render 'add_grad_form' %>');
+		bubble.attr('style', 'position: absolute; left: 0px; top: 0px; z-index: 500;');
 		$('.jcrop-holder').append(bubble);
+		$('#new_graduate').submit(function(event) {
+			event.preventDefault();
+			var form = event.target;
+			console.log(form)
+			$('#coords_x').attr('value', crop_coords.x);
+			$('#coords_x2').attr('value', crop_coords.x2);
+			$('#coords_y').attr('value', crop_coords.y);
+			$('#coords_y2').attr('value', crop_coords.y2);
+			var form_fields = $('#new_graduate').serialize();
+			console.log(form_fields);
+			$.ajax({
+				url: form.action,
+				method: form.method,
+				data:  form_fields
+			});
+
+		});
 	});
 
 	function noteCoords(c) {
 		var bubble = $('#bubble');
-		bubble.attr('style', 'position: absolute; left: ' + (c.x2 + 10) + 'px; top: ' + c.y + 'px');
-		
+		bubble.attr('style', 'position: absolute; left: ' + (c.x2 + 10) + 'px; top: ' + c.y + 'px; z-index: 500;');
+		crop_coords = {};
+		crop_coords.x = c.x;
+		crop_coords.x2 = c.x2;
+		crop_coords.y = c.y;
+		crop_coords.y2 = c.y2;
 	}
 </script>

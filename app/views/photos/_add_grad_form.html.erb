@@ -1,0 +1,12 @@
+<h2>Add Grad</h2>
+<%= semantic_form_for @new_grad, {action: 'graduates/create', id: 'asdf'} do |grad_form| %>
+	<%= grad_form.input :firstname %>
+	<%= grad_form.input :middlename %>
+	<%= grad_form.input :lastname %>
+	<%= grad_form.input :grad_year_id, as: 'hidden', input_html: { value: @grad_year_id } %>
+	<%= grad_form.input :x, as: 'hidden', input_html: { id: 'coords_x' } %>
+	<%= grad_form.input :x2, as: 'hidden', input_html: { id: 'coords_x2' } %>
+	<%= grad_form.input :y, as: 'hidden', input_html: { id: 'coords_y' } %>
+	<%= grad_form.input :y2, as: 'hidden', input_html: { id: 'coords_y2' } %>
+	<%= grad_form.submit 'Create Grad', id: 'grad_create_submit' %>
+<% end %>
