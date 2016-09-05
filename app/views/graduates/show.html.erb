@@ -1,0 +1,24 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Firstname:</strong>
+  <%= @graduate.firstname %>
+</p>
+
+<p>
+  <strong>Middlename:</strong>
+  <%= @graduate.middlename %>
+</p>
+
+<p>
+  <strong>Lastname:</strong>
+  <%= @graduate.lastname %>
+</p>
+
+<p>
+  <strong>Grad year:</strong>
+  <%= @graduate.grad_year_id %>
+</p>
+
+<%= link_to 'Edit', edit_graduate_path(@graduate) %> |
+<%= link_to 'Back', graduates_path %>

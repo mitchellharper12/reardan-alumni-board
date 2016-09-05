@@ -1,0 +1,1 @@
+json.partial! "grad_years/grad_year", grad_year: @grad_year

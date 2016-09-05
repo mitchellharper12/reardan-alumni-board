@@ -1,0 +1,8 @@
+<h1>Upload a New Photo</h1>
+<%= "Error:" + @photo.errors.full_messages.to_sentence if @photo.errors.any? %><br>
+<%= form_for @photo, url: photos_path, html: { multipart: true } do |form| %>
+  <%= label_tag :photo_grad_year, "Grad year:" %>
+  <%= number_field(:photo, :grad_year, in: 1800..2100) %><br>
+  <%= form.file_field :image %><br>
+  <%= submit_tag "Submit" %>
+<% end %>

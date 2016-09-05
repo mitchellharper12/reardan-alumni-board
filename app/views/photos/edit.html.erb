@@ -1,0 +1,23 @@
+<h1>Editing <%= @photo.grad_year.year %></h1>
+
+<div id="photo_tagging">
+	<%= image_tag @photo.image.url, id: "photoTag" %>
+	
+</div>
+
+<script>
+	$(function($) {
+		$('#photoTag').Jcrop({ onSelect: noteCoords });
+		var bubble = $('<div>');
+		bubble.attr('id', 'bubble');
+		bubble.html('<h2>Add Grad</h2>');
+		bubble.attr('style', 'position: absolute; left: 0px; top: 0px');
+		$('.jcrop-holder').append(bubble);
+	});
+
+	function noteCoords(c) {
+		var bubble = $('#bubble');
+		bubble.attr('style', 'position: absolute; left: ' + (c.x2 + 10) + 'px; top: ' + c.y + 'px');
+		
+	}
+</script>

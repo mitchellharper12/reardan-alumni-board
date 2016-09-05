@@ -1,0 +1,1 @@
+json.array! @grad_years, partial: 'grad_years/grad_year', as: :grad_year
