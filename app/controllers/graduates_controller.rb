@@ -28,6 +28,9 @@ class GraduatesController < ApplicationController
 
     respond_to do |format|
       if @graduate.save
+	if request.xhr?
+	  return render json: @graduate
+	end
         format.html { redirect_to @graduate, notice: 'Graduate was successfully created.' }
         format.json { render :show, status: :created, location: @graduate }
       else
@@ -56,7 +59,12 @@ class GraduatesController < ApplicationController
   def destroy
     @graduate.destroy
     respond_to do |format|
-      format.html { redirect_to graduates_url, notice: 'Graduate was successfully destroyed.' }
+      format.html { if request.xhr?
+		      head :no_content
+		    else 
+		      redirect_to graduates_url, notice: 'Graduate was successfully destroyed.' 
+		    end
+      }
       format.json { head :no_content }
     end
   end

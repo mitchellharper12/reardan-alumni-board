@@ -6,15 +6,21 @@
 </div>
 
 <script>
+	window.jcrop_api = {};
 	$(function($) {
-		$('#photoTag').Jcrop({ onSelect: noteCoords });
+		$('#photoTag').Jcrop({ onSelect: noteCoords },function() {
+			window.jcrop_api = this;
+			console.log(this);
+		});
 		<%- @graduates.each do |g| -%>
 			var overlay = $('<div>');
+			overlay.attr("id", "overlay-<%= g.id %>");
 			var x = <%= g.x %>;
 			var y = <%= g.y %>;
 			var width = <%= g.x2 %> - x;
 			var height = <%= g.y2 %> - y;
-			overlay.attr('style', `position: absolute; left: ${x}px; top: ${y}px; z-index: 500; background-color: black; width: ${width}px; height: ${height}px`);
+			overlay.attr('style', `position: absolute; left: ${x}px; top: ${y}px; z-index: 500; background-color: rgba(1,1,1,0.3); width: ${width}px; height: ${height}px`);
+			overlay.html("<%= j render(partial: 'completed_overlay', locals: { graduate: g }) %>");
 			$('.jcrop-holder').append(overlay);
 		<%- end -%>
 		var bubble = $('<div>');
@@ -22,8 +28,9 @@
 		bubble.html('<%= j render 'add_grad_form' %>');
 		bubble.attr('style', 'position: absolute; left: 0px; top: 0px; z-index: 500;');
 		$('.jcrop-holder').append(bubble);
+
+		// Register form submit action
 		$('#new_graduate').submit(function(event) {
-			event.preventDefault();
 			var form = event.target;
 			console.log(form)
 			$('#coords_x').attr('value', crop_coords.x);
@@ -35,11 +42,55 @@
 			$.ajax({
 				url: form.action,
 				method: form.method,
-				data:  form_fields
+				data:  form_fields,
+				success: add_overlay
 			});
+			return false;
 
 		});
+		
 	});
+
+	function add_overlay(data) {
+		console.log(data);
+		var overlay = $('<div>');
+		overlay.attr("id", `overlay-${data.id}`);
+		var x = data.x;
+		var y = data.y;
+		var width = data.x2 - x;
+		var height = data.y2 - y;
+		overlay.attr('style', `position: absolute; left: ${x}px; top: ${y}px; z-index: 500; background-color: rgba(1,1,1,0.3); width: ${width}px; height: ${height}px`);
+		overlay.text(data.firstname + data.middlename + data.lastname);
+		$('.jcrop-holder').append(overlay);
+
+		window.jcrop_api.setSelect(10, 10, 50, 50);
+		window.jcrop_api.release();
+		$('#new_graduate')[0].reset();
+
+	}
+
+	function register_delete_form(id) {
+		$('#remove-grad-form-' + id).submit(function(event) {
+			return false;
+		});
+		$('#delete-submit-' + id).click(function(event) {
+			var form = $('#remove-grad-form-' + id);
+			var form_fields = form.serialize();
+			var action_text = form.attr('action');
+			$.ajax({
+				url: action_text,
+				method: 'delete',
+				data:  form_fields,
+				success: function(data) {
+					$('#overlay-' + id).remove();
+				},
+				error: function(data) {
+					// todo implement
+				}
+			});
+			return false;
+		});
+	}
 
 	function noteCoords(c) {
 		var bubble = $('#bubble');

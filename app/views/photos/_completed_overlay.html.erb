@@ -1,0 +1,5 @@
+<span><%= graduate.firstname %> <%= graduate.middlename %> <%= graduate.lastname %></span>
+<%= form_for graduate, method: :delete, html: { 'data-grad': graduate.id, id: "remove-grad-form-#{graduate.id}" } do |form| %>
+	<%= form.submit 'Remove', id: "delete-submit-#{graduate.id}" %>
+<% end %>
+<script>register_delete_form(<%= graduate.id %>)</script>
