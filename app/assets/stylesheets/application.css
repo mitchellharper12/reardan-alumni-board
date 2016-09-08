@@ -15,6 +15,43 @@
  */
 
 #bubble {
-	background-color: rgba(255, 255, 255, 0.5);
+	background-color: #f0f0f0;
 	padding: 10px;
+	border: 5px solid #800000;
 }
+
+form > li {
+ 	list-style: none;
+}
+
+.overlay {
+	background-color: rgba(0,0,0,0.5);
+}
+
+.overlay:hover {
+	background-color: rgba(0, 0, 0, 0.15)!important;
+	border: 1px solid blue;
+}
+
+.overlay > p {
+	background-color: black;
+	color: white;
+	padding: 2px;
+	margin: 0px;
+	margin-top: 3em;
+	font-size 14px;
+	text-align: center;
+}
+
+.overlay > form {
+	margin-top: 5px;
+	text-align: center;
+	position: relative;
+	top: 30%;
+	display: none;
+}
+
+.overlay:hover > form {
+	display: block;
+}
+.
