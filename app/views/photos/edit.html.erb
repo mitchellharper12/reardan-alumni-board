@@ -6,28 +6,29 @@
 </div>
 
 <script>
-	window.jcrop_api = {};
-	$(function($) {
+	$( document ).ready(function() {
 		$('#photoTag').Jcrop({ onSelect: noteCoords },function() {
-			window.jcrop_api = this;
+			jcrop_api = this;
 			console.log(this);
+			init_page();
 		});
-		<%- @graduates.each do |g| -%>
-			var overlay = $('<div>');
-			overlay.attr("id", "overlay-<%= g.id %>");
-			var x = <%= g.x %>;
-			var y = <%= g.y %>;
-			var width = <%= g.x2 %> - x;
-			var height = <%= g.y2 %> - y;
-			overlay.attr('style', `position: absolute; left: ${x}px; top: ${y}px; z-index: 500; background-color: rgba(1,1,1,0.3); width: ${width}px; height: ${height}px`);
-			overlay.html("<%= j render(partial: 'completed_overlay', locals: { graduate: g }) %>");
-			$('.jcrop-holder').append(overlay);
-		<%- end -%>
+	});
+
+	function init_page() {
+		$.ajax({ url: '<%= grad_year_graduates_path(@photo.grad_year, format: :json) %>',
+			success: function(data) {
+				data.forEach(function(grad) {
+					add_overlay(grad);
+				});
+			}
+		});
+
 		var bubble = $('<div>');
 		bubble.attr('id', 'bubble');
 		bubble.html('<%= j render 'add_grad_form' %>');
-		bubble.attr('style', 'position: absolute; left: 0px; top: 0px; z-index: 500;');
+		bubble.attr('style', 'position: absolute; left: 0px; top: 0px; z-index: 700;');
 		$('.jcrop-holder').append(bubble);
+		
 
 		// Register form submit action
 		$('#new_graduate').submit(function(event) {
@@ -43,13 +44,20 @@
 				url: form.action,
 				method: form.method,
 				data:  form_fields,
-				success: add_overlay
+				success: function(data) {
+					add_overlay(data)
+					$('#new_graduate')[0].reset();
+					window.jcrop_api.setSelect(10, 10, 50, 50);
+					window.jcrop_api.release();
+					bubble.hide();
+				}
 			});
 			return false;
 
 		});
+		bubble.hide();
 		
-	});
+	}
 
 	function add_overlay(data) {
 		console.log(data);
@@ -60,12 +68,42 @@
 		var width = data.x2 - x;
 		var height = data.y2 - y;
 		overlay.attr('style', `position: absolute; left: ${x}px; top: ${y}px; z-index: 500; background-color: rgba(1,1,1,0.3); width: ${width}px; height: ${height}px`);
-		overlay.text(data.firstname + data.middlename + data.lastname);
+		var span = $('<span>');
+		span.text(data.firstname + ' ' + data.middlename + ' ' + data.lastname);
+		overlay.append(span);
+		var form = $('<form>');
+		form.attr('action', '/graduates/' + data.id);
+		form.attr('id', 'remove-grad-form-' + data.id);
+		form.addClass('edit_graduate');
+		form.attr('data-grad', data.id);
+		form.attr('method', 'post');
+
+		var _method = $('<input>');
+		_method.attr('name', '_method');
+		_method.attr('value', 'delete');
+		_method.attr('type', 'hidden');
+		form.append(_method);
+
+		var token = $('<input>');
+		token.attr('name', 'authenticity_token');
+		token.attr('type', 'hidden');
+		token.attr('value', $('meta[name="csrf-token"]')[0].content);
+		form.append(token);
+
+		var submit = $('<input>');
+		submit.attr('id', 'delete-submit-' + data.id);
+		submit.attr('name', 'commit');
+		submit.attr('value', 'Remove');
+		submit.attr('type', 'submit');
+		form.append(submit);
+
+		overlay.append(form);
+		
+
 		$('.jcrop-holder').append(overlay);
 
-		window.jcrop_api.setSelect(10, 10, 50, 50);
-		window.jcrop_api.release();
-		$('#new_graduate')[0].reset();
+		register_delete_form(data.id);
+
 
 	}
 
@@ -94,7 +132,7 @@
 
 	function noteCoords(c) {
 		var bubble = $('#bubble');
-		bubble.attr('style', 'position: absolute; left: ' + (c.x2 + 10) + 'px; top: ' + c.y + 'px; z-index: 500;');
+		bubble.attr('style', 'position: absolute; left: ' + (c.x2 + 10) + 'px; top: ' + c.y + 'px; z-index: 701;');
 		crop_coords = {};
 		crop_coords.x = c.x;
 		crop_coords.x2 = c.x2;

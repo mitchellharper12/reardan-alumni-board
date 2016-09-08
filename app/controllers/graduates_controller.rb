@@ -4,7 +4,11 @@ class GraduatesController < ApplicationController
   # GET /graduates
   # GET /graduates.json
   def index
-    @graduates = Graduate.all
+    if params[:grad_year_id]
+      @graduates = Graduate.where(grad_year_id: params[:grad_year_id])
+    else
+      @graduates = Graduate.all
+    end
   end
 
   # GET /graduates/1
