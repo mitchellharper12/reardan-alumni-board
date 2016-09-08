@@ -1,4 +1,6 @@
 Rails.application.routes.draw do
+  root 'photos#index'
+
   resources :graduates
   resources :grad_years do
     resources :graduates

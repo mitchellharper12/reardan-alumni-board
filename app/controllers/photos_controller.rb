@@ -29,6 +29,12 @@ class PhotosController < ApplicationController
     @graduates = Graduate.where(grad_year_id: @grad_year_id)
   end
 
+  def destroy
+    @photo = Photo.find(params[:id])
+    @photo.delete
+    redirect_to :root
+  end
+
   private
     def photo_params
       params.require(:grad_year, :image)
