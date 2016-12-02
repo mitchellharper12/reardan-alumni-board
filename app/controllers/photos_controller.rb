@@ -1,6 +1,6 @@
 class PhotosController < ApplicationController
   def index
-    @photos = Photo.joins(:grad_year).order("grad_years.year")
+    @photos = Photo.all
   end
 
   def new
@@ -8,8 +8,9 @@ class PhotosController < ApplicationController
   end
 
   def create
-    @grad_year = GradYear.find_or_create_by(year: params[:photo][:grad_year])
-    @photo = Photo.new(image: params[:photo][:image], grad_year: @grad_year)
+    @grad_years = params[:photo][:grad_year].split(/,\s*/).
+	    map{|year| GradYear.find_or_create_by(year: (year.length == 2 ? ('19' + year) : year) ) }
+    @photo = Photo.new(image: params[:photo][:image], grad_years: @grad_years)
 
     respond_to do |format|
       format.html {
@@ -25,7 +26,7 @@ class PhotosController < ApplicationController
   def edit
     @photo = Photo.find(params[:id])
     @new_grad = Graduate.new
-    @grad_year_id = @photo.grad_year_id
+    @grad_year_id = @photo.grad_years.first.try(&:id)
     @graduates = Graduate.where(grad_year_id: @grad_year_id)
   end
 

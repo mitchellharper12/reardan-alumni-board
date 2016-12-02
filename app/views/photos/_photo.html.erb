@@ -1,4 +1,4 @@
     <tr>
-      <td><%= photo.grad_year.year %></td>
-      <td><%= link_to "Edit", edit_photo_path(photo) %> | <%= link_to 'Destroy', photo_path(photo), data: { confirm: "Are you sure you want to delete #{photo.year}?" }, method: :delete %></td>
+      <td><%= photo.years_string %></td>
+      <td><%= link_to "Edit", edit_photo_path(photo) %> | <%= link_to 'Destroy', photo_path(photo), data: { confirm: "Are you sure you want to delete #{photo.years_string}?" }, method: :delete %></td>
     </tr>

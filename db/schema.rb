@@ -10,12 +10,17 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160905060657) do
+ActiveRecord::Schema.define(version: 20161202083021) do
 
   create_table "grad_years", force: :cascade do |t|
     t.integer  "year"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+  end
+
+  create_table "grad_years_photos", id: false, force: :cascade do |t|
+    t.integer "grad_year_id", null: false
+    t.integer "photo_id",     null: false
   end
 
   create_table "graduates", force: :cascade do |t|
@@ -34,7 +39,6 @@ ActiveRecord::Schema.define(version: 20160905060657) do
   create_table "photos", force: :cascade do |t|
     t.string   "filepath"
     t.string   "resolution"
-    t.integer  "grad_year_id"
     t.datetime "created_at",         null: false
     t.datetime "updated_at",         null: false
     t.string   "image_file_name"
