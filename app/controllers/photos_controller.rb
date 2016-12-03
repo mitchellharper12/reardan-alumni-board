@@ -1,6 +1,6 @@
 class PhotosController < ApplicationController
   def index
-    @photos = Photo.all
+    @photos = Photo.all.sort {|p, q| q.years_string <=> p.years_string }
   end
 
   def new
