@@ -15,13 +15,15 @@
 	});
 
 	function init_page() {
-		$.ajax({ url: '<%= grad_year_graduates_path(@photo.grad_year, format: :json) %>',
+		<% @grad_years.each do |year| %>
+		$.ajax({ url: '<%= grad_year_graduates_path(year, format: :json) %>',
 			success: function(data) {
 				data.forEach(function(grad) {
 					add_overlay(grad);
 				});
 			}
 		});
+		<%- end -%>
 
 		var bubble = $('<div>');
 		bubble.attr('id', 'bubble');

@@ -10,7 +10,8 @@
 		var height = data.y2 - y;
 		overlay.attr('style', `position: absolute; left: ${x}px; top: ${y}px; z-index: 500; width: ${width}px; height: ${height}px`);
 		var span = $('<p>');
-		span.text(data.firstname + ' ' + data.middlename + ' ' + data.lastname);
+		console.log(data)
+		span.text(data.firstname + ' ' + data.middlename + ' ' + data.lastname + ' (' + data.year + ')');
 		overlay.append(span);
 		var form = $('<form>');
 		form.attr('action', '/graduates/' + data.id);

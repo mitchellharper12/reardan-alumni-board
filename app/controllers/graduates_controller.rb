@@ -33,7 +33,7 @@ class GraduatesController < ApplicationController
     respond_to do |format|
       if @graduate.save
 	if request.xhr?
-	  return render json: @graduate
+	  return render :show, formats: :json
 	end
         format.html { redirect_to @graduate, notice: 'Graduate was successfully created.' }
         format.json { render :show, status: :created, location: @graduate }
@@ -82,5 +82,6 @@ class GraduatesController < ApplicationController
     # Never trust parameters from the scary internet, only allow the white list through.
     def graduate_params
       params.require(:graduate).permit(:firstname, :middlename, :lastname, :grad_year_id, :x, :x2, :y, :y2)
+
     end
 end

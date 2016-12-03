@@ -26,8 +26,8 @@ class PhotosController < ApplicationController
   def edit
     @photo = Photo.find(params[:id])
     @new_grad = Graduate.new
-    @grad_year_id = @photo.grad_years.first.try(&:id)
-    @graduates = Graduate.where(grad_year_id: @grad_year_id)
+    @grad_years = @photo.grad_years
+    @graduates = @grad_years.map{|gy| Graduate.where(grad_year_id: gy.id) }.flatten
   end
 
   def destroy

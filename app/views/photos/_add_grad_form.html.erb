@@ -3,7 +3,8 @@
 	<%= grad_form.input :firstname %>
 	<%= grad_form.input :middlename %>
 	<%= grad_form.input :lastname %>
-	<%= grad_form.input :grad_year_id, as: 'hidden', input_html: { value: @grad_year_id } %>
+	<%= grad_form.label :grad_year, "Grad Year" %>
+	<%= grad_form.select :grad_year_id, @grad_years.collect{|y| [y.year, y.id]}, as: 'hidden' %>
 	<%= grad_form.input :x, as: 'hidden', input_html: { id: 'coords_x' } %>
 	<%= grad_form.input :x2, as: 'hidden', input_html: { id: 'coords_x2' } %>
 	<%= grad_form.input :y, as: 'hidden', input_html: { id: 'coords_y' } %>
